@@ -8,8 +8,9 @@
         /* --- CSS VARIABLES & RESET --- */
         :root {
             --primary-color: #2c3e50; /* Dark Blue */
-            --accent-color: #e67e22; /* Vibrant Orange for Buttons */
-            --accent-hover: #d35400;
+            --accent-color: #27ae60; /* Green */
+            --accent-hover: #219150;
+            --gold-color: #f1c40f;
             --text-dark: #333;
             --text-light: #666;
             --bg-light: #f9f9f9;
@@ -17,8 +18,8 @@
             --gradient-1: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
             --gradient-2: linear-gradient(to right, #ece9e6, #ffffff);
             --shadow-card: 0 4px 6px rgba(0,0,0,0.1);
-            --shadow-btn: 0 4px 15px rgba(230, 126, 34, 0.4);
-            --shadow-soft: 0 10px 30px rgba(0,0,0,0.08); /* New soft shadow */
+            --shadow-btn: 0 4px 15px rgba(39, 174, 96, 0.4);
+            --shadow-soft: 0 10px 30px rgba(0,0,0,0.08);
         }
 
         * {
@@ -32,6 +33,7 @@
             color: var(--text-dark);
             line-height: 1.6;
             background-color: var(--bg-light);
+            scroll-behavior: smooth;
         }
 
         a { text-decoration: none; color: inherit; }
@@ -68,7 +70,7 @@
             transition: color 0.3s;
         }
 
-        .nav-links a:hover { color: var(--accent-color); }
+        .nav-links a:hover { color: var(--gold-color); }
 
         .cta-nav {
             background-color: var(--accent-color);
@@ -103,14 +105,13 @@
         }
 
         /* --- PUNCHLINES / HINDI QUOTES --- */
-        /* UPDATED: Much larger, bolder, and with text shadow */
         .hindi-quote {
             font-size: 2rem; 
             color: #d35400;
-            font-weight: 800; /* Extra Bold */
+            font-weight: 800;
             margin-bottom: 15px;
             display: block;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.1); /* Subtle shadow for pop */
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
             line-height: 1.3;
         }
 
@@ -130,18 +131,20 @@
         }
 
         .hero-badge {
-            background-color: #ffefc1;
-            color: #856404;
-            padding: 5px 15px;
+            background-color: var(--primary-color);
+            color: var(--gold-color);
+            padding: 8px 20px;
             border-radius: 20px;
-            font-size: 0.9rem;
+            font-size: 1rem;
             display: inline-block;
             margin-bottom: 20px;
             font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            border: 1px solid var(--gold-color);
         }
 
         .price-box {
-            font-size: 2rem;
+            font-size: 2.2rem;
             margin: 20px 0;
             color: var(--accent-color);
             font-weight: 800;
@@ -152,6 +155,16 @@
             color: #999;
             font-size: 1.5rem;
             margin-right: 10px;
+            font-weight: normal;
+        }
+
+        /* BUTTONS */
+        .btn-container {
+            margin-top: 25px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
         }
 
         .main-btn {
@@ -164,14 +177,195 @@
             cursor: pointer;
             box-shadow: var(--shadow-btn);
             transition: transform 0.2s, background-color 0.2s;
-            display: inline-block;
-            margin-top: 10px;
             font-weight: bold;
         }
 
         .main-btn:hover {
             transform: translateY(-3px);
             background-color: var(--accent-hover);
+        }
+
+        .secondary-btn {
+            background-color: transparent;
+            color: var(--primary-color);
+            padding: 13px 38px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            border: 2px solid var(--primary-color);
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .secondary-btn:hover {
+            background-color: var(--primary-color);
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        /* --- SPONSORED BY SECTION --- */
+        #sponsored {
+            background-color: #fff;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .sponsor-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 800px;
+            margin: 0 auto;
+            background: #f8f9fa;
+            padding: 40px;
+            border-radius: 15px;
+            border-left: 5px solid var(--gold-color);
+            box-shadow: var(--shadow-soft);
+        }
+
+        .sponsor-img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background-color: #ddd;
+            object-fit: cover;
+            margin-bottom: 20px;
+            border: 3px solid var(--primary-color);
+        }
+
+        .sponsor-name {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .sponsor-title {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .sponsor-quote {
+            font-size: 1.1rem;
+            font-style: italic;
+            color: #444;
+            line-height: 1.8;
+            position: relative;
+            margin-bottom: 25px;
+        }
+
+        .sponsor-quote::before {
+            content: "“";
+            font-size: 4rem;
+            color: #ddd;
+            position: absolute;
+            top: -30px;
+            left: -20px;
+            z-index: 0;
+        }
+
+        /* Contact Trigger Button */
+        .sponsor-contact-btn {
+            background-color: transparent;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+            padding: 8px 25px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .sponsor-contact-btn:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        /* --- MODAL (POP-UP) STYLES --- */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; 
+            z-index: 2000; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; 
+            height: 100%; 
+            overflow: auto; 
+            background-color: rgba(0,0,0,0.6); 
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto; /* 15% from the top and centered */
+            padding: 30px;
+            border: 1px solid #888;
+            width: 90%; 
+            max-width: 400px;
+            border-radius: 15px;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            animation: slideDown 0.3s ease-out;
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .close-btn {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            position: absolute;
+            right: 20px;
+            top: 10px;
+            cursor: pointer;
+        }
+
+        .close-btn:hover,
+        .close-btn:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .modal-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .social-link {
+            padding: 15px;
+            border-radius: 10px;
+            font-weight: bold;
+            color: white;
+            font-size: 1.1rem;
+            transition: transform 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .social-link:hover { transform: scale(1.03); }
+
+        .insta-btn {
+            background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); 
+        }
+
+        .wa-btn {
+            background-color: #25D366;
         }
 
         /* --- ABOUT & FEATURES --- */
@@ -198,14 +392,13 @@
         .feature-card h3 { margin-bottom: 10px; color: var(--primary-color); }
 
         /* --- SAMPLE TEST --- */
-        /* UPDATED: Removed dashed border, added modern shadow and solid border */
         #sample {
             background: linear-gradient(135deg, #eaf2f8 0%, #ffffff 100%);
             border-radius: 20px;
             margin: 60px auto;
             max-width: 900px;
-            border: 1px solid #d6eaf8; /* Clean solid border */
-            box-shadow: var(--shadow-soft); /* Premium soft glow */
+            border: 1px solid #d6eaf8;
+            box-shadow: var(--shadow-soft);
             padding: 50px 20px;
         }
 
@@ -250,41 +443,54 @@
         tr:last-child td { border-bottom: none; }
         tr:nth-child(even) { background-color: #f9f9f9; }
 
-        /* --- JOIN & CONTACT --- */
+        /* --- JOIN & CONTACT (COMPACT) --- */
         #join {
             background-color: var(--primary-color);
             color: white;
             margin-top: 40px;
             border-radius: 15px 15px 0 0;
             max-width: 100%;
-            padding: 80px 20px;
+            padding: 50px 20px;
         }
 
-        #join h2 { color: white; }
-        #join .sub-heading { color: #ccc; }
+        #join h2 { color: white; margin-bottom: 5px; }
 
-        .steps {
+        .steps-compact-container {
             display: flex;
-            flex-wrap: wrap;
             justify-content: center;
-            gap: 30px;
-            margin: 40px 0;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 25px 0;
+            align-items: center;
         }
 
-        .step-box {
-            background: rgba(255,255,255,0.1);
-            padding: 20px;
-            border-radius: 10px;
-            width: 250px;
+        .step-pill {
+            background: rgba(255,255,255,0.15);
+            padding: 8px 20px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
             border: 1px solid rgba(255,255,255,0.2);
+            font-size: 0.95rem;
         }
 
-        .step-number {
-            font-size: 2rem;
+        .step-circle {
+            background-color: var(--accent-color);
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             font-weight: bold;
-            color: var(--accent-color);
-            margin-bottom: 10px;
-            display: block;
+            font-size: 0.8rem;
+        }
+
+        .arrow-divider {
+            color: rgba(255,255,255,0.5);
+            font-size: 1.2rem;
         }
 
         /* --- FOOTER --- */
@@ -320,10 +526,13 @@
             
             .features-grid { grid-template-columns: 1fr; }
             
-            .steps { flex-direction: column; align-items: center; }
+            .steps-compact-container { flex-direction: column; gap: 10px; }
+            .arrow-divider { transform: rotate(90deg); }
 
-            /* Adjustment so large punchlines don't break mobile */
             .hindi-quote { font-size: 1.5rem; }
+            
+            .btn-container { flex-direction: column; align-items: stretch; gap: 10px; }
+            .main-btn, .secondary-btn { width: 100%; }
         }
     </style>
 </head>
@@ -334,30 +543,53 @@
         <div class="menu-toggle" onclick="toggleMenu()">☰</div>
         <div class="nav-links" id="navLinks">
             <a href="#home" onclick="toggleMenu()">Home</a>
-            <a href="#about" onclick="toggleMenu()">About</a>
+            <a href="#sponsored" onclick="toggleMenu()">Sponsor</a>
             <a href="#features" onclick="toggleMenu()">Features</a>
             <a href="#schedule" onclick="toggleMenu()">Schedule</a>
-            <a href="#join" class="cta-nav" onclick="toggleMenu()">Join Now</a>
+            <a href="#join" class="cta-nav" onclick="toggleMenu()">Join Free</a>
         </div>
     </nav>
 
     <section id="home">
         <div class="container">
-            <span class="hero-badge">🚀 Final Revision Opportunity</span>
+            <span class="hero-badge">⭐ Sponsored by Sunil Vishnoi</span>
             <h1 class="hero-title">AVS UGC NET JRF<br>Political Science Test Series</h1>
             <p style="margin-bottom: 20px; font-size: 1.1rem; color: #555;">
                 Simulating the NTA Pattern. Following the success of the June Batch.
             </p>
             
             <div class="price-box">
-                <span class="old-price">₹129</span> ₹49
+                <span class="old-price">₹529</span> FREE
             </div>
 
             <p style="font-size: 1.1rem; color: #444; margin-bottom: 25px;">
                 Political Science Aspirants! Don't miss the final revision before Jan 6th.
             </p>
 
-            <a href="#join" class="main-btn">Start Practicing</a>
+            <div class="btn-container">
+                <a href="#join" class="main-btn">Register for Free</a>
+                <a href="#sample" class="secondary-btn">Try Free Sample</a>
+            </div>
+        </div>
+    </section>
+
+    <section id="sponsored">
+        <div class="container">
+            <div class="sponsor-card">
+                <img src="sunil.jpg" alt="Sunil Vishnoi" class="sponsor-img">
+                
+                <h3 class="sponsor-name">Sunil Vishnoi</h3>
+                <p class="sponsor-title">Research Scholar, SIS, JNU <br> Columnist, Dainik Jagran (National Edition) </p>
+                
+                <p class="sponsor-quote">
+                    "In the words of Brian Cox: 'We are the only island of meaning and the mote of dust that can think in a galaxy of 500 billion stars.'<br>
+                    If we are the only ones capable of thinking, why not strive to nourish this intelligence? Driven by this thought, we are opening this test series for everyone."
+                </p>
+
+                <button class="sponsor-contact-btn" onclick="openModal()">
+                    Connect with Sunil
+                </button>
+            </div>
         </div>
     </section>
 
@@ -365,7 +597,7 @@
         <div class="container">
             <h2>About Team AVS</h2>
             <p style="max-width: 700px; margin: 0 auto; font-size: 1.1rem;">
-                We are a team of <strong>JRF-qualified scholars</strong> dedicated to simplifying Political Science. We believe in building concepts through practice rather than rote learning.
+               Handwoven by a group of scholars from the top institutes of India. Delivering authentic NET-patterned questions through a deep analysis of past trends. Our team has Research Scholars from JNU, DU, IIT Delhi, HCU, CURAJ, and MGSU, alongside serving Assistant Professors (DU, RPSC) and School Lecturers.
             </p>
         </div>
     </section>
@@ -377,9 +609,14 @@
 
             <div class="features-grid">
                 <div class="feature-card">
-                    <h3>🖥️ NTA Pattern</h3>
+                    <h3>🖥️ NTA Style</h3>
                     <p>Simulated exam interface to get you ready for the real day.</p>
                 </div>
+ <div class="feature-card">
+                    <h3>📊 10 Unit Test </h3>
+                    <p>100 Q each test.</p>
+                </div>
+               
                 <div class="feature-card">
                     <h3>💡 Detailed Explanations</h3>
                     <p>We don't just give answers. We explain <strong>why</strong> an answer is correct.</p>
@@ -457,36 +694,79 @@
         <div class="container">
             <h2>How to Join</h2>
             <p class="hindi-quote" style="color: #f1c40f; text-shadow: none;">"अब की बार, JRF पार"</p>
-            <p style="margin-top: 10px;">Price: <strong>₹49 Only</strong></p>
+            <p><strong>100% FREE (Sponsored)</strong></p>
 
-            <div class="steps">
-                <div class="step-box">
-                    <span class="step-number">1</span>
-                    <p>Click the Button below.</p>
+            <div class="steps-compact-container">
+                <div class="step-pill">
+                    <div class="step-circle">1</div>
+                    Click Register
                 </div>
-                <div class="step-box">
-                    <span class="step-number">2</span>
-                    <p>Pay <strong>₹49</strong> via UPI/QR code in the form.</p>
+                
+                <div class="arrow-divider">&rarr;</div>
+
+                <div class="step-pill">
+                    <div class="step-circle">2</div>
+                    Fill Form
                 </div>
-                <div class="step-box">
-                    <span class="step-number">3</span>
-                    <p>Submit details. We will add you to the Premium Telegram Group.</p>
+
+                <div class="arrow-divider">&rarr;</div>
+
+                <div class="step-pill">
+                    <div class="step-circle">3</div>
+                    Get Telegram Link
                 </div>
             </div>
 
-            <a href=https://docs.google.com/forms/d/e/1FAIpQLSfSOy1m03rK_AqYgbQhKBpgFFBTBjjbVKNsbY-hlAhgMiJ5zA/viewform?usp=sharing&ouid=108088618231792272573 target="_blank" class="main-btn" style="background-color: white; color: var(--primary-color);">Click Here to Join Now</a>
+            <a href= "https://forms.gle/ZM5quKWgFdQERjfp6" target="_blank" class="main-btn" style="background-color: white; color: var(--primary-color);">Register for Free</a>
         </div>
     </section>
 
     <footer>
-        <p>Contact Us via Telegram: <a href="https://t.me/YOUR_ID">@YourTelegramID</a> | Email: your.email@gmail.com</p>
+        <p>Contact Us via Telegram: <a href= https://t.me/Team_AVS_Edu>@Team_AVS_Edu</a> | Email: teamavsedu@gmail.com</p>
         <p style="margin-top: 10px;">&copy; 2025 Team AVS. All Rights Reserved.</p>
     </footer>
 
+    <div id="contactModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <h3 style="margin-bottom: 5px; color: var(--primary-color);">Connect with Sunil</h3>
+            <p style="color:#666; font-size: 0.9rem;">Choose a platform</p>
+            
+            <div class="modal-buttons">
+                <a href="https://www.instagram.com/sunil_bishnoi_jnu/#" target="_blank" class="social-link insta-btn">
+                    📸 Instagram
+                </a>
+                
+                <a href="https://wa.me/919649445529" target="_blank" class="social-link wa-btn">
+                    💬 WhatsApp
+                </a>
+            </div>
+        </div>
+    </div>
+
     <script>
+        // Toggle Mobile Menu
         function toggleMenu() {
             const nav = document.getElementById('navLinks');
             nav.classList.toggle('active');
+        }
+
+        // Modal Logic
+        const modal = document.getElementById("contactModal");
+
+        function openModal() {
+            modal.style.display = "block";
+        }
+
+        function closeModal() {
+            modal.style.display = "none";
+        }
+
+        // Close modal if clicked outside the content box
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
         }
     </script>
 </body>
