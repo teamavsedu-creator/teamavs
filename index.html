@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AVS UGC NET JRF Political Science Test Series</title>
+    <style>
+        /* --- CSS VARIABLES & RESET --- */
+        :root {
+            --primary-color: #2c3e50; /* Dark Blue */
+            --accent-color: #e67e22; /* Vibrant Orange for Buttons */
+            --accent-hover: #d35400;
+            --text-dark: #333;
+            --text-light: #666;
+            --bg-light: #f9f9f9;
+            --bg-white: #ffffff;
+            --gradient-1: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+            --gradient-2: linear-gradient(to right, #ece9e6, #ffffff);
+            --shadow-card: 0 4px 6px rgba(0,0,0,0.1);
+            --shadow-btn: 0 4px 15px rgba(230, 126, 34, 0.4);
+            --shadow-soft: 0 10px 30px rgba(0,0,0,0.08); /* New soft shadow */
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            color: var(--text-dark);
+            line-height: 1.6;
+            background-color: var(--bg-light);
+        }
+
+        a { text-decoration: none; color: inherit; }
+        ul { list-style: none; }
+
+        /* --- NAVIGATION --- */
+        nav {
+            background: var(--primary-color);
+            color: white;
+            padding: 1rem 5%;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-links a {
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover { color: var(--accent-color); }
+
+        .cta-nav {
+            background-color: var(--accent-color);
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-weight: bold;
+        }
+        .cta-nav:hover { background-color: var(--accent-hover); color: white !important; }
+
+        .menu-toggle { display: none; cursor: pointer; font-size: 1.5rem; }
+
+        /* --- SECTIONS GENERAL --- */
+        section {
+            padding: 60px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .container { max-width: 1000px; margin: 0 auto; text-align: center; }
+
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: var(--primary-color);
+        }
+
+        .sub-heading {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            margin-bottom: 40px;
+            font-style: italic;
+        }
+
+        /* --- PUNCHLINES / HINDI QUOTES --- */
+        /* UPDATED: Much larger, bolder, and with text shadow */
+        .hindi-quote {
+            font-size: 2rem; 
+            color: #d35400;
+            font-weight: 800; /* Extra Bold */
+            margin-bottom: 15px;
+            display: block;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1); /* Subtle shadow for pop */
+            line-height: 1.3;
+        }
+
+        /* --- HERO SECTION --- */
+        #home {
+            background: var(--gradient-1);
+            text-align: center;
+            padding: 100px 20px 80px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .hero-title {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+            line-height: 1.2;
+        }
+
+        .hero-badge {
+            background-color: #ffefc1;
+            color: #856404;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            display: inline-block;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .price-box {
+            font-size: 2rem;
+            margin: 20px 0;
+            color: var(--accent-color);
+            font-weight: 800;
+        }
+
+        .old-price {
+            text-decoration: line-through;
+            color: #999;
+            font-size: 1.5rem;
+            margin-right: 10px;
+        }
+
+        .main-btn {
+            background-color: var(--accent-color);
+            color: white;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            border: none;
+            cursor: pointer;
+            box-shadow: var(--shadow-btn);
+            transition: transform 0.2s, background-color 0.2s;
+            display: inline-block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        .main-btn:hover {
+            transform: translateY(-3px);
+            background-color: var(--accent-hover);
+        }
+
+        /* --- ABOUT & FEATURES --- */
+        #about { background-color: white; }
+        
+        #features { background: var(--gradient-2); }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: var(--shadow-card);
+            text-align: center;
+            border-top: 4px solid var(--accent-color);
+        }
+
+        .feature-card h3 { margin-bottom: 10px; color: var(--primary-color); }
+
+        /* --- SAMPLE TEST --- */
+        /* UPDATED: Removed dashed border, added modern shadow and solid border */
+        #sample {
+            background: linear-gradient(135deg, #eaf2f8 0%, #ffffff 100%);
+            border-radius: 20px;
+            margin: 60px auto;
+            max-width: 900px;
+            border: 1px solid #d6eaf8; /* Clean solid border */
+            box-shadow: var(--shadow-soft); /* Premium soft glow */
+            padding: 50px 20px;
+        }
+
+        .sample-btn {
+            background-color: #3498db;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 50px;
+            margin-top: 20px;
+            display: inline-block;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(52, 152, 219, 0.4);
+            transition: transform 0.2s;
+        }
+        .sample-btn:hover { 
+            background-color: #2980b9; 
+            transform: scale(1.05);
+        }
+
+        /* --- SCHEDULE --- */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: white;
+            box-shadow: var(--shadow-card);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        th {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        tr:last-child td { border-bottom: none; }
+        tr:nth-child(even) { background-color: #f9f9f9; }
+
+        /* --- JOIN & CONTACT --- */
+        #join {
+            background-color: var(--primary-color);
+            color: white;
+            margin-top: 40px;
+            border-radius: 15px 15px 0 0;
+            max-width: 100%;
+            padding: 80px 20px;
+        }
+
+        #join h2 { color: white; }
+        #join .sub-heading { color: #ccc; }
+
+        .steps {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+            margin: 40px 0;
+        }
+
+        .step-box {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 10px;
+            width: 250px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .step-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--accent-color);
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            background-color: #1a252f;
+            color: #aaa;
+            text-align: center;
+            padding: 20px;
+            font-size: 0.9rem;
+        }
+        
+        footer a { color: white; text-decoration: underline; }
+
+        /* --- RESPONSIVE MOBILE --- */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 60px;
+                right: 0;
+                background-color: var(--primary-color);
+                width: 100%;
+                text-align: center;
+                padding: 20px 0;
+            }
+            
+            .nav-links.active { display: flex; }
+
+            .menu-toggle { display: block; }
+            
+            .hero-title { font-size: 1.8rem; }
+            
+            .features-grid { grid-template-columns: 1fr; }
+            
+            .steps { flex-direction: column; align-items: center; }
+
+            /* Adjustment so large punchlines don't break mobile */
+            .hindi-quote { font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo">Team AVS</div>
+        <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+        <div class="nav-links" id="navLinks">
+            <a href="#home" onclick="toggleMenu()">Home</a>
+            <a href="#about" onclick="toggleMenu()">About</a>
+            <a href="#features" onclick="toggleMenu()">Features</a>
+            <a href="#schedule" onclick="toggleMenu()">Schedule</a>
+            <a href="#join" class="cta-nav" onclick="toggleMenu()">Join Now</a>
+        </div>
+    </nav>
+
+    <section id="home">
+        <div class="container">
+            <span class="hero-badge">🚀 Final Revision Opportunity</span>
+            <h1 class="hero-title">AVS UGC NET JRF<br>Political Science Test Series</h1>
+            <p style="margin-bottom: 20px; font-size: 1.1rem; color: #555;">
+                Simulating the NTA Pattern. Following the success of the June Batch.
+            </p>
+            
+            <div class="price-box">
+                <span class="old-price">₹129</span> ₹49
+            </div>
+
+            <p style="font-size: 1.1rem; color: #444; margin-bottom: 25px;">
+                Political Science Aspirants! Don't miss the final revision before Jan 6th.
+            </p>
+
+            <a href="#join" class="main-btn">Start Practicing</a>
+        </div>
+    </section>
+
+    <section id="about">
+        <div class="container">
+            <h2>About Team AVS</h2>
+            <p style="max-width: 700px; margin: 0 auto; font-size: 1.1rem;">
+                We are a team of <strong>JRF-qualified scholars</strong> dedicated to simplifying Political Science. We believe in building concepts through practice rather than rote learning.
+            </p>
+        </div>
+    </section>
+
+    <section id="features">
+        <div class="container">
+            <h2>Features</h2>
+            <p class="hindi-quote">"Don't just read the book. Practice the exam."</p>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <h3>🖥️ NTA Pattern</h3>
+                    <p>Simulated exam interface to get you ready for the real day.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>💡 Detailed Explanations</h3>
+                    <p>We don't just give answers. We explain <strong>why</strong> an answer is correct.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>📊 Instant Analysis</h3>
+                    <p>Check your score and rank immediately after submission.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>🔄 Unlimited Attempts</h3>
+                    <p>Practice 24/7. Revise as many times as you want until exam day.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="sample">
+        <div class="container">
+            <p class="hindi-quote">"पहले इस्तेमाल करें, फिर विश्वास करें"</p>
+            <h2>Free Sample Test</h2>
+            <p>We value your trust. Attempt a free sample test below to experience our quality before you join.</p>
+            
+            <a href="sample-test.html" class="sample-btn" target="_blank">Attempt Free Sample Test &rarr;</a>
+        </div>
+    </section>
+
+    <section id="schedule">
+        <div class="container">
+            <h2>The Schedule</h2>
+            <p class="hindi-quote">"तैयारी जीत की"</p>
+            <p class="sub-heading">Consistent practice is the only bridge between you and JRF.</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Tests Releasing (2 Per Day)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Dec 26</td>
+                        <td>Unit 1 (Pol Theory) & Unit 2 (Pol Thought)</td>
+                    </tr>
+                    <tr>
+                        <td>Dec 27</td>
+                        <td>Unit 3 (Indian Pol Thought) & Unit 4 (Comparative)</td>
+                    </tr>
+                    <tr>
+                        <td>Dec 28</td>
+                        <td>Unit 5 (IR) & Unit 6 (India's Foreign Policy)</td>
+                    </tr>
+                    <tr>
+                        <td>Dec 29</td>
+                        <td>Unit 7 (Institutions) & Unit 8 (Pol Processes)</td>
+                    </tr>
+                    <tr>
+                        <td>Dec 30</td>
+                        <td>Unit 9 (Pub Admin) & Unit 10 (Governance)</td>
+                    </tr>
+                    <tr>
+                        <td>Dec 31</td>
+                        <td><strong>Full Mock Test 1 (NTA Pattern)</strong></td>
+                    </tr>
+                    <tr>
+                        <td>Jan 01</td>
+                        <td><strong>Full Mock Test 2 (NTA Pattern)</strong></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section id="join">
+        <div class="container">
+            <h2>How to Join</h2>
+            <p class="hindi-quote" style="color: #f1c40f; text-shadow: none;">"अब की बार, JRF पार"</p>
+            <p style="margin-top: 10px;">Price: <strong>₹49 Only</strong></p>
+
+            <div class="steps">
+                <div class="step-box">
+                    <span class="step-number">1</span>
+                    <p>Click the Button below.</p>
+                </div>
+                <div class="step-box">
+                    <span class="step-number">2</span>
+                    <p>Pay <strong>₹49</strong> via UPI/QR code in the form.</p>
+                </div>
+                <div class="step-box">
+                    <span class="step-number">3</span>
+                    <p>Submit details. We will add you to the Premium Telegram Group.</p>
+                </div>
+            </div>
+
+            <a href="https://forms.gle/YOUR_GOOGLE_FORM_LINK_HERE" target="_blank" class="main-btn" style="background-color: white; color: var(--primary-color);">Click Here to Join Now</a>
+        </div>
+    </section>
+
+    <footer>
+        <p>Contact Us via Telegram: <a href="https://t.me/YOUR_ID">@YourTelegramID</a> | Email: your.email@gmail.com</p>
+        <p style="margin-top: 10px;">&copy; 2025 Team AVS. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        function toggleMenu() {
+            const nav = document.getElementById('navLinks');
+            nav.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>
