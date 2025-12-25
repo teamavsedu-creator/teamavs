@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AVS UGC NET JRF Comparative Politics Test</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .correct-answer {
+            background-color: #16a34a !important; /* Green-600 */
+            color: white !important;
+            border-color: #15803d !important; /* Green-700 */
+        }
+        .wrong-answer {
+            background-color: #dc2626 !important; /* Red-600 */
+            color: white !important;
+            border-color: #b91c1c !important; /* Red-700 */
+        }
+        .disabled-option {
+            pointer-events: none;
+            opacity: 0.9;
+        }
+        .explanation {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out;
+        }
+        .explanation.show {
+            max-height: 500px; /* Adjust as needed */
+        }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-800">
+
+    <!-- Start Screen -->
+    <div id="start-screen" class="min-h-screen flex items-center justify-center p-4">
+        <div class="bg-white p-8 rounded-xl shadow-2xl max-w-md w-full text-center">
+            <h1 class="text-2xl md:text-3xl font-bold text-slate-800 mb-2">Kanha UGC NET JRF</h1>
+            <h2 class="text-xl md:text-2xl font-semibold text-slate-600 mb-6">Comparative Politics Test</h2>
+            <p class="text-slate-500 mb-6">Please enter your name to begin the 1-hour timed test.</p>
+            <input type="text" id="name-input" placeholder="Enter your name" class="w-full px-4 py-3 border border-slate-300 rounded-lg mb-4 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition">
+            <p id="name-error" class="text-red-500 text-sm mb-4 h-4"></p>
+            <button id="start-btn" class="w-full bg-indigo-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-indigo-700 transition-all duration-300 transform hover:scale-105 shadow-lg">Start Quiz</button>
+        </div>
+    </div>
+
+    <!-- Quiz Screen -->
+    <div id="quiz-screen" class="hidden">
+        <div class="flex flex-col lg:flex-row min-h-screen">
+            <!-- Sidebar -->
+            <aside id="sidebar" class="w-full lg:w-72 bg-white p-6 shadow-lg lg:min-h-screen">
+                <h2 id="sidebar-title" class="text-2xl font-bold text-indigo-700 mb-2"></h2>
+                <p class="text-slate-500 mb-6">Comparative Politics</p>
+                <div class="space-y-4">
+                    <div class="bg-slate-100 p-4 rounded-lg">
+                        <p class="text-sm font-medium text-slate-500">Time Left</p>
+                        <p id="timer" class="text-2xl font-bold text-slate-800">60:00</p>
+                    </div>
+                    <div class="bg-slate-100 p-4 rounded-lg">
+                        <p class="text-sm font-medium text-slate-500">Progress</p>
+                        <p id="progress-text" class="text-lg font-semibold text-slate-800">0 / 100</p>
+                        <div class="w-full bg-slate-200 rounded-full h-2.5 mt-2">
+                            <div id="progress-bar" class="bg-indigo-600 h-2.5 rounded-full" style="width: 0%"></div>
+                        </div>
+                    </div>
+                     <div class="grid grid-cols-2 gap-4 text-center">
+                        <div class="bg-green-100 p-3 rounded-lg">
+                            <p class="text-sm font-medium text-green-700">Correct</p>
+                            <p id="correct-count" class="text-2xl font-bold text-green-800">0</p>
+                        </div>
+                        <div class="bg-red-100 p-3 rounded-lg">
+                            <p class="text-sm font-medium text-red-700">Wrong</p>
+                            <p id="wrong-count" class="text-2xl font-bold text-red-800">0</p>
+                        </div>
+                    </div>
+                    <div class="bg-slate-100 p-4 rounded-lg text-center">
+                        <p class="text-sm font-medium text-slate-500">Questions Left</p>
+                        <p id="left-count" class="text-2xl font-bold text-slate-800">100</p>
+                    </div>
+                </div>
+                 <button id="exit-btn" class="w-full mt-8 bg-red-500 text-white font-bold py-3 px-4 rounded-lg hover:bg-red-600 transition-all duration-300">Exit Quiz</button>
+            </aside>
+            <!-- Main Content -->
+            <main class="flex-1 p-4 md:p-8 lg:p-12">
+                <div class="bg-white p-6 md:p-8 rounded-2xl shadow-xl max-w-4xl mx-auto">
+                    <p id="question-counter" class="text-sm font-medium text-indigo-600 mb-2"></p>
+                    <h3 id="question-text" class="text-xl md:text-2xl font-semibold mb-6"></h3>
+                    <div id="options-container" class="space-y-3 mb-6">
+                        <!-- Options will be injected here -->
+                    </div>
+                    <div id="explanation-container" class="explanation">
+                        <h4 class="font-bold text-lg mb-2 text-slate-700">Explanation:</h4>
+                        <p id="explanation-text" class="text-slate-600 leading-relaxed"></p>
+                    </div>
+                    <div class="flex justify-between items-center mt-8 border-t border-slate-200 pt-6">
+                        <button id="prev-btn" class="bg-slate-200 text-slate-700 font-bold py-2 px-6 rounded-lg hover:bg-slate-300 transition-all">Previous</button>
+                        <button id="next-btn" class="bg-indigo-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-indigo-700 transition-all">Next</button>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Results Screen -->
+    <div id="results-screen" class="hidden min-h-screen flex items-center justify-center p-4">
+        <div class="bg-white p-8 rounded-xl shadow-2xl max-w-4xl w-full">
+            <h2 id="results-heading" class="text-3xl font-bold text-center mb-4">Quiz Complete!</h2>
+            <p id="results-summary" class="text-center text-lg text-slate-600 mb-8"></p>
+            <div class="w-full lg:w-3/4 mx-auto mb-8">
+                <canvas id="results-chart"></canvas>
+            </div>
+            <div id="wrong-explanations-container" class="mt-8">
+                <h3 class="text-2xl font-bold border-b pb-2 mb-4">Review Area: Explanations for Incorrect Answers</h3>
+                <div id="wrong-explanations-list" class="space-y-6 max-h-96 overflow-y-auto pr-4">
+                    <!-- Explanations injected here -->
+                </div>
+            </div>
+             <div class="text-center mt-8">
+                <button id="restart-btn" class="bg-indigo-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-indigo-700 transition-all">Restart Quiz</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Exit Confirmation Modal -->
+    <div id="exit-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+        <div class="bg-white p-8 rounded-xl shadow-2xl max-w-sm w-full text-center">
+            <h3 class="text-xl font-bold mb-4">Exit Quiz?</h3>
+            <p class="text-slate-600 mb-6">Are you sure you want to exit? Your progress will be saved and the test will end.</p>
+            <div class="flex justify-center gap-4">
+                <button id="confirm-exit-btn" class="bg-red-500 text-white font-bold py-2 px-6 rounded-lg hover:bg-red-600 transition-all">Yes, Exit</button>
+                <button id="cancel-exit-btn" class="bg-slate-200 text-slate-700 font-bold py-2 px-6 rounded-lg hover:bg-slate-300 transition-all">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+<script>
+// --- DATA: 100 QUESTIONS ---
+const questions = [
+    { category: "Approaches", question: "Who is considered the first scholar to conduct a systematic comparative study of governments by analyzing 158 constitutions of Greek city-states and other polities?", options: ["Plato", "Aristotle", "Cicero", "Polybius"], correct: 1, explanation: "Aristotle is widely regarded as the earliest proponent of the institutional approach in comparative politics. In his work, he undertook an extensive empirical study, comparing the constitutions and political practices of a total of 158 different political systems." },
+    { category: "Approaches", question: "According to Jean Blondel, who are considered the 'True founders of the Comparative Government Approach' for their influential works in the late 19th and early 20th centuries?", options: ["Aristotle and Plato", "Karl Marx and Friedrich Engels", "Bryce and Lowell", "Herman Finer and Carl Friedrich"], correct: 2, explanation: "Jean Blondel specifically credits James Bryce and A. Lawrence Lowell as the 'True founders' of this modern iteration of the institutional approach. Their works shifted the focus towards a more systematic study of the formal governmental institutions of major Western powers." },
+    { category: "Approaches", question: "Which of the following is NOT a common criticism leveled against the traditional Institutional Approach?", options: ["It is Ethnocentric, focusing primarily on European democracies.", "It is overly empirical and data-driven, neglecting normative questions.", "It is Prescriptive and Normative in nature.", "It is Historical without being sufficiently analytical."], correct: 1, explanation: "The traditional Institutional Approach is criticized for being ethnocentric, normative, and descriptive rather than analytical. The criticism that it is 'overly empirical and data-driven' is incorrect; in fact, the behavioral revolution emerged to make the study more empirical." },
+    { category: "Approaches", question: "The revival of institutionalism in the 1980s, known as Neo-institutionalism, is most closely associated with which pair of scholars?", options: ["David Easton and Gabriel Almond", "Seymour Martin Lipset and Samuel P. Huntington", "James G. March and Johann P. Olsen", "Robert Dahl and Charles Lindblom"], correct: 2, explanation: "Neo-institutionalism's intellectual architects are James G. March and Johann P. Olsen. Their groundbreaking works in the 1980s laid the theoretical groundwork for this new approach, arguing that political outcomes are profoundly shaped by the institutional context." },
+    { category: "Approaches", question: "What is the primary analytical shift from the old Institutionalism to Neo-institutionalism?", options: ["A shift from studying non-Western countries to studying only Western democracies.", "A shift from a focus on informal norms to a strict focus on formal legal rules.", "A shift from describing formal structures to analyzing how institutions, both formal and informal, shape individual behavior and political outcomes.", "A shift from quantitative analysis to purely historical narratives."], correct: 2, explanation: "The core intellectual leap from the old to the new institutionalism is its analytical focus. It moved from describing formal structures to explaining how institutions—both formal and informal—constrain and enable the behavior of political actors." },
+    { category: "Approaches", question: "The assumption that individuals are rational actors who make decisions based on cost-benefit analyses within the constraints of institutional rules is central to which approach?", options: ["Sociological Institutionalism", "Historical Institutionalism", "Discursive Institutionalism", "Rational Choice Institutionalism"], correct: 3, explanation: "Rational Choice Institutionalism is built upon the assumption that political actors are rational and self-interested utility-maximizers who calculate costs and benefits within an institutional framework of rules and procedures." },
+    { category: "Approaches", question: "The concept that historical processes and critical junctures create institutions that persist over time and constrain future choices, often referred to as the 'Logic of Path-dependency', is the cornerstone of which approach?", options: ["Rational Choice Institutionalism", "Historical Institutionalism", "Sociological Institutionalism", "Discursive Institutionalism"], correct: 1, explanation: "Historical Institutionalism emphasizes the role of time and historical sequence. Its central concept is 'path dependency,' which suggests that early decisions can lock in a particular institutional arrangement for a long time, making it difficult to deviate from the established path." },
+    { category: "Approaches", question: "The idea that political institutions are shaped by cultural norms and that actors follow a 'Logic of Appropriateness' based on what is socially and culturally expected is central to:", options: ["Rational Choice Institutionalism", "Historical Institutionalism", "Sociological Institutionalism", "Discursive Institutionalism"], correct: 2, explanation: "Sociological Institutionalism argues that institutions are embedded in a society's culture. Actors are guided by a 'Logic of Appropriateness,' where they behave based on shared understandings, identities, and what is considered legitimate action." },
+    { category: "Approaches", question: "Which approach to comparative politics is defined by its focus on understanding social and political phenomena by viewing economics and politics as interconnected forces?", options: ["Systems Approach", "Structural-Functionalism", "Political Economy Approach", "Political Culture Approach"], correct: 2, explanation: "The Political Economy Approach fundamentally rejects the notion that politics and economics can be studied in isolation. Its core premise is that economic forces and political power are mutually constitutive." },
+    { category: "Development Theories", question: "Who is considered the 'father of Modern Political Economy' for his 1776 book 'Inquiry into the Nature and Causes of the Wealth of Nations'?", options: ["David Ricardo", "Karl Marx", "John Maynard Keynes", "Adam Smith"], correct: 3, explanation: "Adam Smith is universally regarded as the father of modern political economy. His magnum opus, 'The Wealth of Nations' (1776), laid the intellectual foundation for classical economics and capitalism." },
+    { category: "Development Theories", question: "Arrange W.W. Rostow's five stages of economic growth in the correct chronological order: 1. Traditional stage, 2. Take-off, 3. Precondition for take-off, 4. High Mass Consumption, 5. Drive to Maturity", options: ["1, 2, 3, 5, 4", "1, 3, 2, 5, 4", "3, 1, 2, 4, 5", "1, 3, 5, 2, 4"], correct: 1, explanation: "The correct sequence of Rostow's stages is: 1. Traditional stage -> 3. Precondition for take-off -> 2. Take-off -> 5. Drive to Maturity -> 4. High Mass Consumption." },
+    { category: "Development Theories", question: "Which school of thought emerged as a major critique of Modernization Theory, arguing that underdevelopment in the 'Periphery' is a direct consequence of its economic relationship with the developed 'Core' nations?", options: ["Post-Modernism", "Dependency Theory", "Behavioralism", "Neo-institutionalism"], correct: 1, explanation: "Dependency Theory fundamentally challenged Modernization Theory by arguing that underdevelopment was an active process, famously termed the 'development of underdevelopment,' caused by the exploitative global capitalist system." },
+    { category: "Approaches", question: "According to Gabriel Almond and Sidney Verba's classic 1963 study, *The Civic Culture*, what is political culture?", options: ["The formal constitutional arrangements of a political system.", "The set of economic policies pursued by the government.", "'Political Orientations and Attitudes towards the Political System.'", "The process of elite recruitment and circulation."], correct: 2, explanation: "In 'The Civic Culture', Almond and Verba defined political culture as the specific pattern of 'political orientations and attitudes towards the political system' held by the members of a society." },
+    { category: "Approaches", question: "In *The Civic Culture*, which type of political culture is characterized by citizens being aware of political outputs but having a passive, obedient relationship to the system?", options: ["Parochial Culture", "Subject Culture", "Participant Culture", "Homogenous Culture"], correct: 1, explanation: "In a Subject Culture, citizens are aware of the national political system and its outputs, but their relationship to it is passive. They see themselves as 'subjects' of the government rather than active participants." },
+    { category: "Approaches", question: "Almond and Powell identified three types of political orientation. Which refers to the feelings of attachment, involvement, or rejection towards political objects?", options: ["Cognitive Orientation", "Affective Orientation", "Evaluative Orientation", "Participative Orientation"], correct: 1, explanation: "Affective Orientation is the emotional dimension of political culture. It encompasses feelings of attachment, loyalty, pride, cynicism, or rejection that a citizen has towards political objects." },
+    { category: "Approaches", question: "David Easton's Systems Approach in political science was significantly inspired by which broader scientific theory?", options: ["Einstein's Theory of Relativity", "Darwin's Theory of Evolution", "Ludwig von Bertalanffy's General Systems Theory", "Pavlov's Classical Conditioning"], correct: 2, explanation: "Easton drew his primary inspiration from General Systems Theory (GST), developed by biologist Ludwig von Bertalanffy, which proposed that complex phenomena could be understood by analyzing them as 'systems'." },
+    { category: "Approaches", question: "In David Easton's political system model, the 'Inputs' that flow from the environment into the political system consist of which two main components?", options: ["Laws and Policies", "Demands and Support", "Legislature and Executive", "Power and Authority"], correct: 1, explanation: "In Easton's model, the interaction between the system and its environment happens through two fundamental types of 'inputs': Demands (needs and wants) and Support (attitudes and behaviors that sustain the system)." },
+    { category: "Approaches", question: "In David Easton's model, what is the function of the 'Political System' itself, often described as a 'black box'?", options: ["To generate demands from the environment.", "To directly implement policies without modification.", "To filter and convert the inputs of demands and support into outputs.", "To create a feedback loop that connects outputs to the environment."], correct: 2, explanation: "The 'Political System' in Easton's framework acts as a central processing unit or 'gatekeeper'. Its primary role is to filter and convert inputs (demands and support) into 'outputs' (binding decisions and actions)." },
+    { category: "Approaches", question: "What is the most significant difference between David Easton's Systems Approach and Gabriel Almond's Structural-Functional Model?", options: ["Easton's model is cyclical, while Almond's is linear.", "Almond's model includes inputs and outputs, while Easton's does not.", "Easton's model includes a 'feedback loop', while Almond's model does not have this feature.", "Almond's model applies only to democratic systems, while Easton's is universal."], correct: 2, explanation: "The most crucial distinction is the 'feedback loop'. In Easton's model, this loop connects outputs back to the environment, influencing the next round of inputs, making the model dynamic. Almond's original model lacks this explicit feedback mechanism." },
+    { category: "Approaches", question: "According to Gabriel Almond's Structural-Functionalism, which of the following are all considered 'Input Functions'?", options: ["Rule Making, Rule Application, Rule Adjudication", "Political Socialisation, Interest Articulation, Interest Aggregation, Political Communication", "Demand, Support, Feedback, Environment", "Legitimacy, Penetration, Participation, Distribution"], correct: 1, explanation: "The four input functions in Almond's model are: Political Socialisation and Recruitment, Interest Articulation, Interest Aggregation, and Political Communication. These are the processes through which society makes its demands known." },
+    { category: "Approaches", question: "In Almond's Structural-Functional model, the functions of Rule Making, Rule Application, and Rule Adjudication are known as what?", options: ["Input Functions", "Feedback Functions", "Environmental Functions", "Output Functions"], correct: 3, explanation: "The output functions are the authoritative actions performed by the governmental structures. They are: Rule Making (legislative), Rule Application (executive), and Rule Adjudication (judicial)." },
+    { category: "State Theory", question: "The classic definition of the state in the 1933 Montevideo Convention requires which four features?", options: ["A defined territory, a permanent population, an effective government, and a standing army.", "A defined territory, a permanent population, an effective government, and the capacity to enter into relations with other states.", "A permanent population, a national currency, an effective government, and a written constitution.", "A defined territory, a common language, a single-party system, and a sovereign leader."], correct: 1, explanation: "The Montevideo Convention codifies four essential criteria for statehood: 1) a defined territory, 2) a permanent population, 3) an effective government, and 4) the capacity to enter into relations with other states." },
+    { category: "State Theory", question: "Which scholar famously argued that 'War made the state, and the state made war'?", options: ["Max Weber", "Karl Marx", "Michael Mann", "Charles Tilly"], correct: 3, explanation: "Charles Tilly argued that the modern state was an unintended byproduct of centuries of warfare. Rulers had to develop the core capacities of the state (taxation, administration) to be successful in war." },
+    { category: "State Theory", question: "In the *Communist Manifesto*, the Marxist view of the state under capitalism is summarized by which statement?", options: ["The state is a night-watchman.", "The state is a neutral umpire.", "The executive of the modern state is but a committee for managing the common affairs of the whole bourgeoisie.", "War made the state, and the state made war."], correct: 2, explanation: "The classical Marxist theory of the state is instrumentalist. The famous quote from the *Communist Manifesto* perfectly encapsulates this view, suggesting the state's institutions are designed to serve the capitalist class." },
+    { category: "State Theory", question: "The concept of a 'night-watchman state', a minimalist state limited to protecting individuals from force, theft, and fraud, is most famously advocated by which liberal thinker?", options: ["John Maynard Keynes", "John Rawls", "Robert Nozick", "T.H. Green"], correct: 2, explanation: "The 'night-watchman state' is the cornerstone of libertarian political philosophy, most forcefully argued by Robert Nozick in his book 'Anarchy, State, and Utopia' (1974)." },
+    { category: "State Theory", question: "What is the key distinction between the instrumentalist view of Ralph Miliband and the structuralist view of Nicos Poulantzas on the state?", options: ["Miliband believed the state serves the working class, while Poulantzas believed it serves the capitalists.", "Miliband focused on the social ties between state officials and capitalists, while Poulantzas argued the state's structure inherently reproduces capitalism.", "Miliband was a proponent of the welfare state, while Poulantzas advocated for a minimalist state.", "Miliband's theory applies to socialist states, while Poulantzas's applies to capitalist states."], correct: 1, explanation: "The Miliband-Poulantzas debate highlights two views: Miliband's instrumentalism (the state is an instrument because of who runs it) and Poulantzas's structuralism (the state serves capitalism because of its structural position, regardless of who runs it)." },
+    { category: "State Theory", question: "The theory of the 'overdeveloped state' in post-colonial societies was proposed by:", options: ["Partha Chatterjee", "Frantz Fanon", "Hamza Alavi", "Edward Said"], correct: 2, explanation: "Hamza Alavi developed the theory of the 'overdeveloped state' to explain how post-colonial states inherited a powerful bureaucratic-military apparatus from the colonial era that was disproportionately strong compared to domestic social classes." },
+    { category: "Political Regimes", question: "Richard Titmuss classified welfare states into three models. Which model, exemplified by Scandinavian countries, is based on universal services provided as an integral part of society?", options: ["Residual (Liberal) Model", "Industrial Achievement (Corporatist) Model", "Institutional Redistributive (Social Democratic) Model", "Minimalist (Libertarian) Model"], correct: 2, explanation: "The Institutional Redistributive (Social Democratic) Model, associated with Scandinavia, views social welfare as a fundamental right of citizenship and provides universal, high-quality services to all citizens." },
+    { category: "Political Regimes", question: "Which of the following is NOT a defining feature of a Liberal Democracy?", options: ["It is an indirect and representative form of democracy.", "It is characterized by a fusion of the state and civil society.", "It is based on competition and electoral choice.", "It provides protection for minorities and individuals."], correct: 1, explanation: "A core principle of liberal democracy is the clear separation between the state and civil society. A fusion of the two is a characteristic of totalitarianism, not liberal democracy." },
+    { category: "Political Regimes", question: "The form of democracy that emphasizes the need for discourse, debate, and consensus-based decision-making is known as:", options: ["Participatory Democracy", "Totalitarian Democracy", "Deliberative Democracy", "Liberal Democracy"], correct: 2, explanation: "Deliberative democracy argues that the legitimacy of political decisions rests on the quality of the public deliberation that precedes them, focusing on reasoned discussion to reach consensus." },
+    { category: "Political Regimes", question: "Carl Friedrich and Zbigniew Brzezinski identified a 'six-point syndrome' for totalitarian regimes. Which is NOT part of this syndrome?", options: ["An official ideology.", "A system of multi-party competition.", "A system of terroristic policing.", "State control of all aspects of economic life."], correct: 1, explanation: "A system of multi-party competition is the hallmark of a pluralistic democracy and is diametrically opposed to the nature of a totalitarian state, which is characterized by a single-party system." },
+    { category: "Political Regimes", question: "Which statement accurately describes a core tenet of Fascism?", options: ["It champions Enlightenment values like rationalism and freedom.", "It promotes liberal individualism.", "It believes in 'strength through unity,' requiring the individual to surrender their identity to the collective.", "It advocates for a classless, stateless society."], correct: 2, explanation: "Fascism is fundamentally anti-individualist. A central tenet is the idea of the organic state, where the collective is supreme and the individual's purpose is to serve the state, completely submerging their identity." },
+    { category: "Political Regimes", question: "The concept of 'Bureaucratic Authoritarianism,' referring to a regime of bureaucrats and technocrats who prioritize economic development through repression, is associated with:", options: ["Juan Linz", "Guillermo O'Donnell", "Hannah Arendt", "Samuel P. Huntington"], correct: 1, explanation: "Guillermo O'Donnell developed the concept of 'Bureaucratic Authoritarianism' (BA) to explain the type of military dictatorships that emerged in more developed countries of Latin America in the 1960s and 1970s." },
+    { category: "Democratization & Colonialism", question: "According to Samuel P. Huntington, what is a 'wave of democratization'?", options: ["Any transition from a non-democratic to a democratic regime.", "A period when the number of democracies in the world doubles.", "A group of transitions from non-democratic to democratic regimes that occur within a specified time and significantly outnumber transitions in the opposite direction.", "The process by which a single country becomes a consolidated democracy."], correct: 2, explanation: "Huntington defines a 'wave' as a cluster of transitions to democracy occurring in a concentrated time period, where these transitions significantly outnumber transitions in the opposite direction (democratic breakdowns)." },
+    { category: "Democratization & Colonialism", question: "Arrange the events from Samuel P. Huntington's analysis of democratization in correct order: 1. Second Wave, 2. First Reverse Wave, 3. Third Wave, 4. First Wave, 5. Second Reverse Wave", options: ["4, 1, 2, 5, 3", "4, 2, 1, 5, 3", "1, 2, 4, 5, 3", "4, 5, 1, 2, 3"], correct: 1, explanation: "The correct historical sequence is: First Wave (4) -> First Reverse Wave (2) -> Second Wave (1) -> Second Reverse Wave (5) -> Third Wave (3)." },
+    { category: "Democratization & Colonialism", question: "Which of the following is considered a key element of the Third Wave of Democratization (1974-2000)?", options: ["The decolonization of India and Indonesia.", "The restoration of democracy in post-WWII West Germany and Japan.", "The end of right-wing dictatorships in Southern Europe (Greece, Portugal, Spain).", "The expansion of male suffrage in the United States in the 1820s."], correct: 2, explanation: "The Third Wave's starting point is identified with the fall of dictatorships in Southern Europe, beginning with Portugal's Carnation Revolution in 1974, followed by Greece and Spain." },
+    { category: "Democratization & Colonialism", question: "What is the primary distinction between colonialism and imperialism?", options: ["Colonialism involves economic domination, while imperialism involves political domination.", "Colonialism involves permanent settlement and direct control, while imperialism is often characterized by indirect domination.", "Colonialism was practiced by European powers, while imperialism was practiced by Asian powers.", "Colonialism is a modern phenomenon, while imperialism is an ancient one."], correct: 1, explanation: "Colonialism is a specific practice involving physical settlement and direct rule. Imperialism is a broader concept of extending power, which can be direct (colonialism) or indirect (economic/political control from afar)." },
+    { category: "Democratization & Colonialism", question: "The term 'Neo-colonialism,' the control of less-developed countries by indirect means, was famously elaborated by which leader?", options: ["Frantz Fanon", "Kwame Nkrumah", "Nelson Mandela", "Edward Said"], correct: 1, explanation: "Kwame Nkrumah, the first President of Ghana, was a leading theorist of neo-colonialism. In his 1965 book, he argued that former colonies remained subject to a new form of domination through economic and political pressures." },
+    { category: "Democratization & Colonialism", question: "The field of Post-colonial studies was profoundly influenced by Edward Said's 1978 book, which critiqued the Western construction of the East as inferior. What is the title of this text?", options: ["*The Wretched of the Earth*", "*Culture and Imperialism*", "*Orientalism*", "*Can the Subaltern Speak?*"], correct: 2, explanation: "Edward Said's *Orientalism* (1978) is the foundational text of post-colonial theory. It argues that the Western academic and artistic tradition of representing the 'Orient' was a discourse of power that justified colonial rule." },
+    { category: "Democratization & Colonialism", question: "Which theorist described the nation as an 'imagined community' made possible by 'print capitalism'?", options: ["Ernest Gellner", "Eric Hobsbawm", "Partha Chatterjee", "Benedict Anderson"], correct: 3, explanation: "In 'Imagined Communities', Benedict Anderson argued that the nation is an 'imagined political community' whose sense of shared identity among strangers was facilitated by the mass production of books and newspapers in vernacular languages." },
+    { category: "Democratization & Colonialism", question: "The theory that nationalism is a product of industrialization, requiring a culturally homogenous workforce, is associated with which thinker?", options: ["Benedict Anderson", "Ernest Gellner", "Paul Brass", "Tom Nairn"], correct: 1, explanation: "Ernest Gellner presented a functionalist theory of nationalism, arguing it arises to fulfill the needs of modern industrial society for a mobile, literate, and culturally homogenous workforce, imposed through a state-run education system." },
+    { category: "Democratization & Colonialism", question: "Which scholar argued that nationalist thought in the colonial world was often a 'derivative discourse,' borrowed from Western models?", options: ["Eric Hobsbawm", "Benedict Anderson", "Partha Chatterjee", "Gayatri Spivak"], correct: 2, explanation: "Partha Chatterjee argued that anti-colonial nationalism, while opposing colonial rule, was trapped within the Western intellectual frameworks it sought to challenge, making it a 'derivative discourse'." },
+    { category: "Democratization & Colonialism", question: "Eric Hobsbawm argued that many national traditions are recent creations by elites to foster unity. What concept did he use to describe this?", options: ["Derivative Discourse", "Imagined Communities", "Invention of Traditions", "High Culture"], correct: 2, explanation: "In *The Invention of Tradition*, Eric Hobsbawm argued that many traditions which appear ancient are in fact recent inventions by elites to establish social cohesion and legitimize authority." },
+    { category: "Democratization & Colonialism", question: "Which instrumentalist theorist argued that ethnic and national identities are tools manipulated by competing political elites to generate mass support?", options: ["Ernest Gellner", "Paul R. Brass", "Tom Nairn", "Benedict Anderson"], correct: 1, explanation: "Paul R. Brass is a leading proponent of the instrumentalist theory, arguing that elites define, redefine, and manipulate ethnic identities as 'convenient tools' in their competition for political and economic resources." },
+    { category: "Representation & Governance", question: "The model of representation where the representative is expected to act on their own conscience and judgment for the good of the community is known as the:", options: ["Delegate Model", "Mandate Model", "Trusteeship Model", "Resemblance Model"], correct: 2, explanation: "The Trusteeship Model, famously associated with Edmund Burke, posits that a representative is entrusted to use their own wisdom and judgment to serve the long-term interest of the nation, rather than simply following constituent instructions." },
+    { category: "Representation & Governance", question: "Which model of representation insists that the representative should act as the direct voice of their constituents, strictly following their instructions?", options: ["Trusteeship Model", "Delegate Model", "Politico Model", "Resemblance Model"], correct: 1, explanation: "The Delegate Model holds that a representative's primary role is to be a mouthpiece for their electors, faithfully reflecting their expressed will without interposing their own judgment. Thomas Paine was a key advocate." },
+    { category: "Representation & Governance", question: "The theory that the legislature should be a 'portrait of the nation in miniature,' with representation from all social groups, is known as:", options: ["The Mandate Model", "The Politico Model", "Microcosmic Representation", "The Trusteeship Model"], correct: 2, explanation: "Microcosmic Representation, or the Resemblance Model, argues that a representative body is only truly representative if its composition reflects the social diversity of the wider society it governs." },
+    { category: "Representation & Governance", question: "Which electoral system involves voters ranking candidates in order of preference in multi-member constituencies, with votes being transferred from eliminated or surplus candidates?", options: ["First-Past-the-Post (FPTP)", "Two-Round System (TRS)", "Single Transferable Vote (STV)", "Party List System"], correct: 2, explanation: "The Single Transferable Vote (STV) is a proportional representation system where voters rank candidates. To get elected, a candidate needs a quota of votes, and surplus or eliminated votes are transferred according to voter preferences." },
+    { category: "Representation & Governance", question: "The electoral system where the candidate who receives a plurality of votes in a single-member constituency wins the seat is known as:", options: ["Alternative Vote (AV)", "Proportional Representation (PR)", "Two-Round System (TRS)", "First-Past-the-Post (FPTP)"], correct: 3, explanation: "First-Past-the-Post (FPTP) is a plurality system where the candidate with the most votes wins, even if they do not have an absolute majority (over 50%). It is used in the UK and India (Lok Sabha)." },
+    { category: "Representation & Governance", question: "A hybrid electoral system where voters cast two ballots—one for a local candidate and one for a national party list—is called:", options: ["Single Transferable Vote (STV)", "Alternative Vote (AV)", "Mixed-Member Proportional Representation (MMP)", "Two-Round System (TRS)"], correct: 2, explanation: "Mixed-Member Proportional (MMP) is a hybrid system combining local constituency representation (like FPTP) with national party list votes to ensure overall proportionality in the legislature. It is used in Germany and New Zealand." },
+    { category: "Representation & Governance", question: "Which theorist made a primary distinction in party systems based on the number of parties (One Party vs. Pluralist Party Systems)?", options: ["Giovanni Sartori", "Jean Blondel", "Gabriel Almond", "Maurice Duverger"], correct: 3, explanation: "Maurice Duverger's classification is based primarily on the number of competing parties, making a broad initial division between one-party systems and pluralistic systems (two-party and multi-party)." },
+    { category: "Representation & Governance", question: "Which political scientist distinguished between 'Moderate Multiparty systems' with centripetal competition and 'Polarized Multiparty systems' with centrifugal competition?", options: ["Maurice Duverger", "Arend Lijphart", "Giovanni Sartori", "Rajni Kothari"], correct: 2, explanation: "Giovanni Sartori refined the study of party systems by focusing on ideological distance. He argued that competition is 'centripetal' (towards the center) in moderate systems and 'centrifugal' (away from the center) in polarized systems." },
+    { category: "Representation & Governance", question: "What is the core principle of 'Constitutionalism'?", options: ["That every state must have a single, written constitution.", "That the constitution should be easily amended.", "That the state should be organized and its power limited by a constitution to prevent arbitrary rule.", "That the judiciary should be the most powerful branch."], correct: 2, explanation: "Constitutionalism is the normative principle that the power of government should be limited. It is the idea of 'a government of laws, not of men,' where the state must operate according to constitutional rules." },
+    { category: "Representation & Governance", question: "Which of the following is NOT one of A.V. Dicey's three principles of the Rule of Law?", options: ["Supremacy of Law", "Equality before the Law", "The right to social and economic welfare", "Predominance of Legal Spirit"], correct: 2, explanation: "A.V. Dicey's three principles are: Supremacy of Law, Equality before the Law, and Predominance of Legal Spirit. The right to social and economic welfare is a concept from the 20th-century welfare state, not Dicey's classical liberal view." },
+    { category: "Representation & Governance", question: "What is the key difference between a written and an unwritten constitution in terms of amendment?", options: ["Written are always shorter.", "Written are typically rigid and hard to amend, while unwritten are flexible and changed by ordinary law.", "Unwritten cannot be changed.", "Written grant power to the executive, unwritten to the legislature."], correct: 1, explanation: "A written constitution is typically supreme law, making it rigid and difficult to amend. An unwritten constitution has no distinction between constitutional and ordinary law, making it flexible and easy to change by a simple majority." },
+    { category: "Political Actors & Processes", question: "According to Neumann, what is the primary distinction between a pressure group and a political party?", options: ["Groups seek power, parties seek influence.", "Groups have long-term interests, parties have short-term.", "Groups seek to exert influence on policy, while parties seek to win power and form the government.", "Groups have heterogenous interests, parties have homogenous interests."], correct: 2, explanation: "Neumann distinguishes between 'influence-seeking' pressure groups, which aim to affect policy from the outside, and 'power-seeking' political parties, whose goal is to win elections and form the government." },
+    { category: "Political Actors & Processes", question: "Maurice Duverger identified groups that pressure the system for others, often with a monetary motive (e.g., media). What did he call them?", options: ["Exclusive Groups", "Partial Groups", "Associational Groups", "Pseudo-Pressure Groups"], correct: 3, explanation: "Duverger used the term 'Pseudo-Pressure Groups' for entities like media organizations that exert political pressure not for their own direct interests, but on behalf of others, often with a commercial motivation." },
+    { category: "Political Actors & Processes", question: "Gabriel Almond and G. Bingham Powell classified interest groups into four types. Which represents the correct sequence (IAAN)?", options: ["Institutional, Anomic, Associational, Non-Associational", "Associational, Institutional, Anomic, Non-Associational", "Institutional, Associational, Anomic, Non-Associational", "Anomic, Non-Associational, Institutional, Associational"], correct: 2, explanation: "The correct sequence of Almond and Powell's typology is: Institutional, Associational, Anomic, and Non-Associational (IAAN), classified based on their level of organization and nature." },
+    { category: "Political Actors & Processes", question: "An interest group that seeks to promote a wider cause, has open membership, and whose benefits accrue to all is known as a:", options: ["Protective Group", "Promotional Group", "Peak Association", "Think-Tank"], correct: 1, explanation: "A Promotional Group (or cause group) is focused on promoting a particular cause (e.g., environment, human rights). Its membership is open, and it seeks public goods that benefit everyone, not just its members." },
+    { category: "Political Actors & Processes", question: "The theory of the 'Circulation of Elites,' positing that 'History is a graveyard of aristocracies,' was developed by which Italian sociologist?", options: ["Gaetano Mosca", "Robert Michels", "Vilfredo Pareto", "C. Wright Mills"], correct: 2, explanation: "Vilfredo Pareto developed the concept of the 'Circulation of Elites,' arguing that history is a continuous process where ruling elites lose their vigor and are replaced by a new, more dynamic elite rising from the masses." },
+    { category: "Political Actors & Processes", question: "Which elite theorist argued that every society has a ruling class and a ruled class, and the ruling class justifies its power through a 'Political Formula'?", options: ["Vilfredo Pareto", "Robert Michels", "James Burnham", "Gaetano Mosca"], correct: 3, explanation: "Gaetano Mosca argued that the ruling class maintains power not just by force, but by a 'Political Formula'—a widely accepted set of beliefs or ideologies (e.g., divine right, popular sovereignty) that legitimizes its rule." },
+    { category: "Political Actors & Processes", question: "The sociological thesis that all organizations, including democratic ones, will inevitably succumb to rule by a small elite is known as the:", options: ["Circulation of Elites", "Managerial Revolution", "Iron Law of Oligarchy", "Power Elite Theory"], correct: 2, explanation: "The 'Iron Law of Oligarchy' is Robert Michels' famous thesis. He argued that due to the necessities of organization, a small group of leaders inevitably emerges, making democracy and large-scale organization incompatible." },
+    { category: "Political Actors & Processes", question: "Which theorist argued that capitalists were being displaced by a new elite of professional managers who control modern corporations and the state?", options: ["C. Wright Mills", "James Burnham", "Robert Michels", "Vilfredo Pareto"], correct: 1, explanation: "In *The Managerial Revolution*, James Burnham argued that effective control of the economy and state was passing from capitalist owners to a new 'managerial elite' of technical and administrative experts." },
+    { category: "Political Actors & Processes", question: "According to C. Wright Mills, the 'Power Elite' in the United States is composed of top leaders from which three domains?", options: ["The corporation, the military, and the federal government.", "The media, the universities, and the trade unions.", "The political parties, the interest groups, and the church.", "The judiciary, the legislature, and the executive."], correct: 0, explanation: "C. Wright Mills identified the 'power elite' as an interlocking directorate of leaders from three key institutions: the major corporations, the military establishment, and the executive branch of the federal government." },
+    { category: "Political Actors & Processes", question: "Which theorist redefined democracy as a 'democratic method' where the people's role is to choose between competing teams of political leaders in an election?", options: ["Karl Manheim", "Robert Dahl", "Joseph Schumpeter", "Robert Michels"], correct: 2, explanation: "In *Capitalism, Socialism & Democracy*, Joseph Schumpeter offered a realist, 'democratic elitist' theory, defining democracy as an institutional arrangement for a competitive struggle for the people's vote, not rule by the people." },
+    { category: "Political Actors & Processes", question: "Theda Skocpol argued that social revolutions (France, Russia, China) are primarily caused by what combination of factors?", options: ["A charismatic leader and powerful ideology.", "A severe economic depression.", "State breakdown due to international pressures combined with widespread peasant uprisings.", "The spread of democratic ideas."], correct: 2, explanation: "Theda Skocpol's structuralist theory posits that social revolutions occur when two conditions converge: the administrative and military collapse of the state (often due to war) and widespread, autonomous peasant revolts from below." },
+    { category: "Political Actors & Processes", question: "Which theorist, in *The Anatomy of Revolution*, likened revolutions to a 'fever' that follows predictable stages from moderation to a 'reign of terror' and then a 'Thermidorian reaction'?", options: ["Karl Marx", "Theda Skocpol", "Crane Brinton", "James C. Davies"], correct: 2, explanation: "Crane Brinton used the metaphor of a 'fever' to describe a common pattern in major revolutions, involving stages of moderate rule, extremist takeover, a crisis (reign of terror), and a return to order (Thermidorian reaction)." },
+    { category: "Political Actors & Processes", question: "The 'J-Curve Theory' of revolution, which posits that revolutions occur when a long period of rising expectations is followed by a sharp reversal, was proposed by:", options: ["Ted Gurr", "James C. Davies", "Alexis de Tocqueville", "Samuel Huntington"], correct: 1, explanation: "James C. Davies' J-Curve Theory argues that the revolutionary moment is most likely when a period of improvement raises expectations, and a sudden downturn creates an 'intolerable gap' between what people expect and what they get." },
+    { category: "Political Actors & Processes", question: "What is the primary focus that distinguishes 'New Social Movements' (NSMs) from 'Old Social Movements' (OSMs)?", options: ["NSMs are violent, OSMs were peaceful.", "NSMs are focused on economic issues, OSMs on cultural identity.", "NSMs are focused on culture, identity, and lifestyle, while OSMs were centered on economic redistribution and class.", "NSMs are highly centralized, OSMs were decentralized."], correct: 2, explanation: "Old Social Movements (e.g., labor movement) were primarily focused on economic and class issues. New Social Movements (e.g., feminism, environmentalism) are more concerned with non-material issues of culture, identity, and quality of life." },
+    { category: "Development Theories", question: "The theory of New Social Movements (NSMs), explaining their rise in post-industrial societies, is associated with which group of thinkers?", options: ["Marx, Lenin, and Gramsci", "Easton, Almond, and Pye", "Touraine, Habermas, and Offe", "Pareto, Mosca, and Michels"], correct: 2, explanation: "The theoretical framework for NSMs was primarily developed by European sociologists like Alain Touraine, Jürgen Habermas, and Claus Offe, who linked their rise to the shift to post-industrial society." },
+    { category: "Political Actors & Processes", question: "Which scholar developed the 'Political Process Model' of social movements, emphasizing political opportunities, mobilizing structures, and framing?", options: ["Neil Smelser", "Anthony Giddens", "Doug McAdam", "Ronald Inglehart"], correct: 2, explanation: "Doug McAdam's 'Political Process Model' argues that movements emerge and succeed based on an interaction of three key factors: favorable political opportunities, the availability of mobilizing structures, and effective framing processes." },
+    { category: "Political Actors & Processes", question: "Which of the following is NOT a primary role of Non-Governmental Organizations (NGOs) in civil society campaigns?", options: ["Raising awareness and educating the public.", "Advocating and lobbying governments.", "Contesting elections to directly form the government.", "Providing essential services to communities."], correct: 2, explanation: "NGOs perform many roles like advocacy, awareness, and service provision, but they do not contest elections to win power. That is the defining function of a political party, not an NGO." },
+    { category: "Development Theories", question: "According to Lucian Pye, political development involves the progressive attainment of which three core aspects (ECD)?", options: ["Economy, Culture, Democracy", "Elites, Capacity, Differentiation", "Equality, Capacity, Differentiation", "Elections, Constitution, Development"], correct: 2, explanation: "Lucian Pye's 'developmental syndrome' consists of three core values a modernizing political system must achieve: Equality (mass participation), Capacity (state effectiveness), and Differentiation (specialization of structures)." },
+    { category: "Development Theories", question: "Lucian Pye identified six crises developing systems face. Which is NOT one of them?", options: ["Identity Crisis", "Legitimacy Crisis", "Globalization Crisis", "Distribution Crisis"], correct: 2, explanation: "Pye's six crises are Identity, Legitimacy, Penetration, Participation, Integration, and Distribution. 'Globalization Crisis' is a more contemporary term not part of his original framework." },
+    { category: "Development Theories", question: "The concept of 'Political Decay,' which occurs when political mobilization outpaces institutional development, was put forward by:", options: ["Lucian Pye", "Fred W. Riggs", "David Apter", "Samuel P. Huntington"], correct: 3, explanation: "In *Political Order in Changing Societies*, Samuel Huntington argued that 'Political Decay' results when social mobilization grows much faster than the capacity of political institutions to handle it, leading to instability." },
+    { category: "Development Theories", question: "Which scholar warned of a 'Development Trap' where societies import modern administrative structures that are not supported by the local environment?", options: ["Lucian Pye", "Fred W. Riggs", "Edward Shills", "W.W. Rostow"], correct: 1, explanation: "Fred W. Riggs used an 'ecological' approach and coined the term 'Development Trap' to describe the dysfunction that occurs when modern bureaucratic forms are adopted without the corresponding social and political integration needed to make them work." },
+    { category: "Development Theories", question: "Which statement best represents the core argument of Modernization Theory?", options: ["All societies follow a similar, linear path of development from 'traditional' to 'modern' by adopting Western practices.", "The development of poor countries is blocked by their exploitation by rich countries.", "Political development is determined by cultural values.", "The key to development is a strong, authoritarian state."], correct: 0, explanation: "Modernization Theory's core belief is that all societies can progress along a single, linear path from a 'traditional' to a 'modern' stage by emulating the economic, political, and cultural models of the West." },
+    { category: "Development Theories", question: "The concept of 'Development of Underdevelopment' is the central thesis of which dependency theorist?", options: ["Samir Amin", "Theotonio Dos Santos", "Andre Gunder Frank", "Immanuel Wallerstein"], correct: 2, explanation: "Andre Gunder Frank's concept of the 'development of underdevelopment' is central to dependency theory. It argues that the same capitalist process that developed the core simultaneously and actively underdeveloped the periphery." },
+    { category: "Development Theories", question: "Immanuel Wallerstein's World Systems Theory introduced a third category of states that is exploited by the core while exploiting the periphery. What is this category called?", options: ["The Sub-core", "The Semi-periphery", "The Near-periphery", "The Trans-periphery"], correct: 1, explanation: "A key innovation of Wallerstein's World Systems Theory is the 'semi-periphery.' These are states with an intermediate level of development that are both exploited and exploiters, playing a stabilizing role in the world system." },
+    { category: "Thinkers & Concepts", question: "Mancur Olson, in *The Logic of Collective Action*, argued that large groups fail to act collectively due to the 'free-rider' problem. What solution did he propose?", options: ["Provision of public goods.", "Government coercion.", "Provision of 'selective incentives' that benefit only members.", "Promotion of a strong ideology."], correct: 2, explanation: "Olson's solution to the free-rider problem is the use of 'selective incentives'—private goods or benefits that the organization can provide exclusively to those who join and contribute, giving them a rational incentive to participate." },
+    { category: "Thinkers & Concepts", question: "The idea that modernization can falter, leading to the rise of autocratic regimes, is known as the 'Breakdowns of Modernisation.' This concept was developed by:", options: ["David Apter", "S.N. Eisenstadt", "Lucian Pye", "Samuel P. Huntington"], correct: 1, explanation: "S.N. Eisenstadt challenged the linear optimism of early modernization theory with his concept of 'Breakdowns of Modernization,' analyzing why new nations often failed to sustain democratic frameworks and reverted to authoritarianism." },
+    { category: "Thinkers & Concepts", question: "Which political scientist provided a three-fold classification of the 'Role of the Representative' as Trustee-Deputy, Facilitator-Neutral, and District-State?", options: ["Hannah Pitkin", "Edmund Burke", "John C. Wahlke", "J.S. Mill"], correct: 2, explanation: "John C. Wahlke and his colleagues developed this empirical typology based on their study of state legislators, providing a more nuanced understanding of how representatives perceive their roles beyond the simple trustee/delegate dichotomy." },
+    { category: "Thinkers & Concepts", question: "In *Problems of Democratic Transition and Consolidation*, Juan Linz and Alfred Stepan argue that a consolidated democracy requires what key condition besides free elections?", options: ["A pure market economy.", "Fusion of civil and political society.", "The existence of an effective state with the capacity to command, regulate, and extract resources.", "A single, dominant political party."], correct: 2, explanation: "Linz and Stepan argue that a functioning, effective state bureaucracy is a crucial prerequisite for democratic consolidation. Without an effective state, there can be no rule of law or protection of citizens' rights." },
+    { category: "Representation & Governance", question: "A 'crisis of constitutionalism' is most likely to occur when:", options: ["A country writes its first constitution.", "The government uses emergency powers as a pretext to suspend civil liberties indefinitely.", "The judiciary declares a law unconstitutional.", "Citizens engage in peaceful protests."], correct: 1, explanation: "A crisis of constitutionalism occurs when the principle of limited government is fundamentally threatened. This most often happens when an executive abuses temporary emergency powers to dismantle democratic checks and balances and establish authoritarian rule." },
+    { category: "Thinkers & Concepts", question: "Match the influential book with its author: 1. *The Civic Culture*, 2. *Political Order in Changing Societies*, 3. *Imagined Communities*, 4. *The Ruling Class*.", options: ["1-Huntington, 2-Mosca, 3-Almond/Verba, 4-Anderson", "1-Almond/Verba, 2-Huntington, 3-Anderson, 4-Mosca", "1-Anderson, 2-Huntington, 3-Mosca, 4-Almond/Verba", "1-Mosca, 2-Almond/Verba, 3-Anderson, 4-Huntington"], correct: 1, explanation: "The correct matches are: *The Civic Culture* - Almond & Verba; *Political Order in Changing Societies* - Huntington; *Imagined Communities* - Anderson; *The Ruling Class* - Mosca." },
+    { category: "Thinkers & Concepts", question: "Match the concept with its theorist: 1. Development of Underdevelopment, 2. Iron Law of Oligarchy, 3. Waves of Democratization, 4. Derivative Discourse.", options: ["1-Frank, 2-Michels, 3-Huntington, 4-Chatterjee", "1-Huntington, 2-Frank, 3-Chatterjee, 4-Michels", "1-Chatterjee, 2-Huntington, 3-Michels, 4-Frank", "1-Michels, 2-Chatterjee, 3-Frank, 4-Huntington"], correct: 0, explanation: "The correct matches are: Development of Underdevelopment - Andre Gunder Frank; Iron Law of Oligarchy - Robert Michels; Waves of Democratization - Samuel P. Huntington; Derivative Discourse - Partha Chatterjee." },
+    { category: "Approaches", question:"Which scholar, in a 2004 study, combined elements of Historical and Rational Choice Institutionalism to analyze 'institutional change in skill regimes,' focusing on processes like 'layering' and 'conversion'?", options: ["Vivien A. Schmidt", "Peter A. Hall", "Kathleen Thelen", "Johan P. Olsen"], correct: 2, explanation: "Kathleen Thelen provided a more dynamic model of institutional change by combining historical context with an analysis of actors' strategic interests, showing how change often occurs incrementally through 'layering' and 'conversion'." },
+    { category: "Approaches", question:"The intellectual origins of Sociological Institutionalism can be traced to the 1977 work 'Institutionalized Organizations: Formal Structure as Myth and Ceremony' by which two theorists?", options: ["DiMaggio and Powell", "March and Olsen", "Meyer and Rowan", "Campbell and Pedersen"], correct: 2, explanation: "The seminal 1977 article by John W. Meyer and Brian Rowan is considered the starting point of Sociological Institutionalism. They argued that organizations adopt structures to gain cultural legitimacy, a core idea later imported into political science." },
+    { category: "Approaches", question:"The branch of New Institutionalism that explains how ideas and discourse are used by actors to devise and legitimize political action according to a 'Logic of Communication' is known as:", options: ["Rational Choice Institutionalism", "Historical Institutionalism", "Sociological Institutionalism", "Discursive Institutionalism"], correct: 3, explanation: "Discursive Institutionalism, championed by Vivien A. Schmidt, focuses on the substantive content of ideas and the interactive processes of discourse (argument, persuasion) in shaping political outcomes, operating on a 'Logic of Communication'." },
+    { category: "Representation & Governance", question: "Which event is considered a key trigger for the 'First Reverse Wave' of democratization (1922-1942)?", options: ["The Russian Revolution of 1917", "The end of World War I", "The rise of Fascism with Mussolini's March on Rome in 1922", "The Great Depression of 1929"], correct: 2, explanation: "The First Reverse Wave, according to Huntington, was initiated by the rise of authoritarian and fascist ideologies, exemplified by Benito Mussolini's ascent to power in Italy in 1922, which provided an alternative model to democracy." },
+    { category: "Political Regimes", question: "Who wrote the influential book *Anarchy, State, and Utopia* (1974), which provides a philosophical justification for the minimalist 'night-watchman state'?", options: ["John Rawls", "Isaiah Berlin", "F.A. Hayek", "Robert Nozick"], correct: 3, explanation: "Robert Nozick's *Anarchy, State, and Utopia* is the foundational text for modern libertarianism, arguing that any state more extensive than a minimal one that protects property rights and enforces contracts is morally unjustifiable." },
+    { category: "Democratization & Colonialism", question: "The concept of 'mimicry' in post-colonial theory, describing the ambivalent way in which the colonized imitate the colonizer's language and culture, is most associated with which thinker?", options: ["Edward Said", "Homi K. Bhabha", "Gayatri Spivak", "Frantz Fanon"], correct: 1, explanation: "Homi K. Bhabha developed the concept of 'mimicry' to describe the often-parodic imitation of the colonizer by the colonized. He argued this creates an ambivalent 'third space' that challenges the authority of colonial discourse." },
+    { category: "Representation & Governance", question: "What is Duverger's Law?", options: ["A law stating that multi-party systems are more stable than two-party systems.", "A sociological principle that all organizations tend towards oligarchy.", "A principle which states that first-past-the-post electoral systems tend to produce two-party systems.", "A law that defines the legal requirements for forming a political party in France."], correct: 2, explanation: "Duverger's Law is a well-known principle in political science which posits a strong correlation between the use of a first-past-the-post (or plurality) electoral system and the emergence of a two-party political system." },
+    { category: "Thinkers & Concepts", question: "Which scholar, associated with the Subaltern Studies group, famously asked 'Can the Subaltern Speak?' to highlight the problem of epistemic violence and the silencing of marginalized voices?", options: ["Partha Chatterjee", "Ranajit Guha", "Gayatri Chakravorty Spivak", "Homi K. Bhabha"], correct: 2, explanation: "Gayatri Chakravorty Spivak's influential essay 'Can the Subaltern Speak?' questions whether marginalized groups (the subaltern) can ever truly represent themselves in dominant Western discourses without being co-opted or misinterpreted." },
+    { category: "Representation & Governance", question: "The concept of a 'dominant party system,' where one party governs continuously in a context of free elections (e.g., Congress in India before 1977), was elaborated by which scholar?", options: ["Giovanni Sartori", "Maurice Duverger", "Jean Blondel", "Arend Lijphart"], correct: 0, explanation: "While Duverger identified the category, Giovanni Sartori extensively analyzed and defined the 'dominant party system' as a distinct type, separate from a true one-party state, because electoral competition, however lopsided, still exists." },
+    { category: "Political Regimes", question: "Hannah Arendt, in *The Origins of Totalitarianism*, distinguishes totalitarianism from simple dictatorships by its unique combination of which two elements?", options: ["Ideology and Terror", "Nationalism and Militarism", "Propaganda and Charisma", "Bureaucracy and Law"], correct: 0, explanation: "For Hannah Arendt, totalitarianism is a novel form of rule that cannot be equated with traditional tyranny. Its defining characteristic is the combination of an all-encompassing ideology that claims to explain all of history and a system of pervasive, arbitrary terror that atomizes the population and destroys the space for human action and spontaneity." },
+    { category: "Development Theories", question: "In Fred W. Riggs's ecological model, a society caught between traditional and modern norms, characterized by a high degree of 'formalism' (where rules on paper don't match reality), is called a:", options: ["Fused Society", "Diffracted Society", "Prismatic Society", "Agrarian Society"], correct: 2, explanation: "Fred Riggs used the metaphor of a prism splitting light to describe transitional societies. A 'Fused' society is traditional, where structures are multi-functional. A 'Diffracted' society is modern, with specialized structures. The 'Prismatic Society' is the transitional stage, where old and new norms coexist, leading to formalism, overlapping functions, and corruption. The 'Sala model' is his term for the administrative subsystem in a prismatic society." },
+    { category: "Political Regimes", question: "Arend Lijphart's theory of 'Consociational Democracy' is designed to provide stable democratic governance in which type of society?", options: ["Homogenous societies with a strong national identity", "Societies with high levels of economic inequality", "Deeply divided or plural societies with distinct ethnic or religious segments", "Post-industrial societies focused on new social movements"], correct: 2, explanation: "Consociationalism, developed by Arend Lijphart, is a model of democracy specifically designed for deeply divided (plural) societies, where political stability is threatened by sharp ethnic, religious, or linguistic cleavages. It relies on power-sharing mechanisms among the elites of the different segments, such as grand coalitions, mutual vetoes, proportionality in appointments, and segmental autonomy." },
+    { category: "Political Regimes", question: "According to Robert Dahl, a political system with high levels of both public contestation and the right to participate, which is the closest real-world approximation of the democratic ideal, is known as a:", options: ["Liberal Democracy", "Social Democracy", "Polyarchy", "Competitive Oligarchy"], correct: 2, explanation: "In his work *Polyarchy: Participation and Opposition*, Robert Dahl argues that the pure ideal of democracy is unattainable. He uses the term 'Polyarchy' to describe real-world regimes that have two key dimensions: high levels of public contestation (opposition is permitted) and high levels of inclusiveness (the right to participate is widespread). For Dahl, a polyarchy is not a perfect democracy, but it is the form of government that is the closest practical approximation of the democratic ideal." },
+    { category: "Representation & Governance", question: "The principle of 'Separation of Powers,' famously elaborated by Montesquieu and embedded in the US Constitution, divides governmental authority among which three branches?", options: ["The President, the Senate, and the House of Representatives", "The Federal Government, the State Governments, and the Local Governments", "The Legislative, the Executive, and the Judicial branches", "The Military, the Bureaucracy, and the Presidency"], correct: 2, explanation: "The US Constitution is built on the principle of Separation of Powers to prevent the concentration of power in any single entity. It divides the core functions of government into three distinct branches: the Legislative branch (Congress), responsible for making laws; the Executive branch (the Presidency), responsible for enforcing laws; and the Judicial branch (the Supreme Court and lower courts), responsible for interpreting laws. This is combined with a system of checks and balances, where each branch has some power over the others." }
+];
+
+// --- DOM ELEMENTS ---
+const startScreen = document.getElementById('start-screen');
+const nameInput = document.getElementById('name-input');
+const nameError = document.getElementById('name-error');
+const startBtn = document.getElementById('start-btn');
+const quizScreen = document.getElementById('quiz-screen');
+const resultsScreen = document.getElementById('results-screen');
+const sidebarTitle = document.getElementById('sidebar-title');
+const timerEl = document.getElementById('timer');
+const progressText = document.getElementById('progress-text');
+const progressBar = document.getElementById('progress-bar');
+const correctCountEl = document.getElementById('correct-count');
+const wrongCountEl = document.getElementById('wrong-count');
+const leftCountEl = document.getElementById('left-count');
+const questionCounter = document.getElementById('question-counter');
+const questionText = document.getElementById('question-text');
+const optionsContainer = document.getElementById('options-container');
+const explanationContainer = document.getElementById('explanation-container');
+const explanationText = document.getElementById('explanation-text');
+const prevBtn = document.getElementById('prev-btn');
+const nextBtn = document.getElementById('next-btn');
+const exitBtn = document.getElementById('exit-btn');
+const resultsHeading = document.getElementById('results-heading');
+const resultsSummary = document.getElementById('results-summary');
+const resultsChartCanvas = document.getElementById('results-chart');
+const wrongExplanationsList = document.getElementById('wrong-explanations-list');
+const restartBtn = document.getElementById('restart-btn');
+const exitModal = document.getElementById('exit-modal');
+const confirmExitBtn = document.getElementById('confirm-exit-btn');
+const cancelExitBtn = document.getElementById('cancel-exit-btn');
+
+// --- QUIZ STATE ---
+let shuffledQuestions = [];
+let currentQuestionIndex = 0;
+let score = 0;
+let wrongAnswers = 0;
+let userAnswers = [];
+let timerInterval;
+let chartInstance;
+
+// --- FUNCTIONS ---
+
+// Shuffle questions using Fisher-Yates algorithm
+function shuffleArray(array) {
+    let currentIndex = array.length, randomIndex;
+    while (currentIndex !== 0) {
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex--;
+        [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+    }
+    return array;
+}
+
+// Start the quiz
+function startQuiz() {
+    const name = nameInput.value.trim();
+    if (name === "") {
+        nameError.textContent = "Please enter your name to start.";
+        nameInput.classList.add('border-red-500');
+        return;
+    }
+    nameError.textContent = "";
+    nameInput.classList.remove('border-red-500');
+
+    // Initialize state
+    shuffledQuestions = shuffleArray([...questions]);
+    currentQuestionIndex = 0;
+    score = 0;
+    wrongAnswers = 0;
+    userAnswers = new Array(shuffledQuestions.length).fill(null);
+    
+    // Setup UI
+    sidebarTitle.textContent = `Welcome, ${name}!`;
+    startScreen.classList.add('hidden');
+    resultsScreen.classList.add('hidden');
+    quizScreen.classList.remove('hidden');
+
+    loadQuestion(currentQuestionIndex);
+    updateSidebar();
+    startTimer();
+}
+
+// Timer functionality
+function startTimer() {
+    let time = 3600; // 60 minutes in seconds
+    timerInterval = setInterval(() => {
+        if (time <= 0) {
+            clearInterval(timerInterval);
+            endQuiz();
+            return;
+        }
+        time--;
+        const minutes = Math.floor(time / 60);
+        const seconds = time % 60;
+        timerEl.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    }, 1000);
+}
+
+// Load a specific question
+function loadQuestion(index) {
+    // Reset UI
+    optionsContainer.innerHTML = '';
+    explanationContainer.classList.remove('show');
+    
+    const question = shuffledQuestions[index];
+    questionCounter.textContent = `Question ${index + 1} of ${shuffledQuestions.length}`;
+    questionText.textContent = question.question;
+
+    question.options.forEach((option, i) => {
+        const optionButton = document.createElement('button');
+        optionButton.className = "w-full text-left p-4 border border-slate-300 rounded-lg hover:bg-indigo-100 hover:border-indigo-400 transition-all";
+        optionButton.innerHTML = `<span class="font-bold mr-2">${String.fromCharCode(65 + i)}.</span> ${option}`;
+        optionButton.dataset.index = i;
+        optionButton.onclick = () => selectAnswer(i);
+        optionsContainer.appendChild(optionButton);
+    });
+
+    // Handle previously answered questions
+    if (userAnswers[index] !== null) {
+        showAnswerResult(userAnswers[index].selectedIndex);
+    }
+
+    // Update navigation buttons
+    prevBtn.disabled = index === 0;
+    prevBtn.classList.toggle('opacity-50', index === 0);
+    nextBtn.textContent = index === shuffledQuestions.length - 1 ? "Finish" : "Next";
+}
+
+// Handle answer selection
+function selectAnswer(selectedIndex) {
+    if (userAnswers[currentQuestionIndex] !== null) return; // Already answered
+
+    const question = shuffledQuestions[currentQuestionIndex];
+    const isCorrect = selectedIndex === question.correct;
+    
+    userAnswers[currentQuestionIndex] = { selectedIndex, isCorrect };
+
+    if (isCorrect) {
+        score++;
+    } else {
+        wrongAnswers++;
+    }
+
+    showAnswerResult(selectedIndex);
+    updateSidebar();
+}
+
+// Show visual feedback for the selected answer
+function showAnswerResult(selectedIndex) {
+    const question = shuffledQuestions[currentQuestionIndex];
+    
+    // Disable all options
+    Array.from(optionsContainer.children).forEach(btn => {
+        btn.classList.add('disabled-option');
+        const btnIndex = parseInt(btn.dataset.index);
+
+        // Highlight correct answer
+        if (btnIndex === question.correct) {
+            btn.classList.add('correct-answer');
+        }
+        // Highlight wrong answer if selected
+        if (selectedIndex !== question.correct && btnIndex === selectedIndex) {
+            btn.classList.add('wrong-answer');
+        }
+    });
+
+    // Show explanation
+    explanationText.textContent = question.explanation;
+    explanationContainer.classList.add('show');
+}
+
+// Update sidebar stats
+function updateSidebar() {
+    const attempted = userAnswers.filter(a => a !== null).length;
+    correctCountEl.textContent = score;
+    wrongCountEl.textContent = wrongAnswers;
+    leftCountEl.textContent = shuffledQuestions.length - attempted;
+    progressText.textContent = `${attempted} / ${shuffledQuestions.length}`;
+    progressBar.style.width = `${(attempted / shuffledQuestions.length) * 100}%`;
+}
+
+// Navigation
+function nextQuestion() {
+    if (currentQuestionIndex < shuffledQuestions.length - 1) {
+        currentQuestionIndex++;
+        loadQuestion(currentQuestionIndex);
+    } else {
+        endQuiz();
+    }
+}
+
+function prevQuestion() {
+    if (currentQuestionIndex > 0) {
+        currentQuestionIndex--;
+        loadQuestion(currentQuestionIndex);
+    }
+}
+
+// End the quiz and show results
+function endQuiz() {
+    clearInterval(timerInterval);
+    quizScreen.classList.add('hidden');
+    resultsScreen.classList.remove('hidden');
+
+    const name = nameInput.value.trim() || 'Guest';
+    resultsHeading.textContent = `Quiz Complete, ${name}!`;
+    resultsSummary.textContent = `You scored ${score} out of ${shuffledQuestions.length}.`;
+
+    displayResultsChart();
+    displayWrongExplanations();
+}
+
+// Display the results chart for weak areas
+function displayResultsChart() {
+    const categoryErrors = {};
+    const categories = [...new Set(questions.map(q => q.category))];
+    categories.forEach(cat => {
+        if (cat) categoryErrors[cat] = 0;
+    });
+
+    userAnswers.forEach((answer, index) => {
+        if (answer && !answer.isCorrect) {
+            const category = shuffledQuestions[index].category;
+            if (category && categoryErrors.hasOwnProperty(category)) {
+                categoryErrors[category]++;
+            }
+        }
+    });
+
+    if (chartInstance) {
+        chartInstance.destroy();
+    }
+
+    chartInstance = new Chart(resultsChartCanvas, {
+        type: 'bar',
+        data: {
+            labels: Object.keys(categoryErrors),
+            datasets: [{
+                label: 'Number of Incorrect Answers',
+                data: Object.values(categoryErrors),
+                backgroundColor: 'rgba(79, 70, 229, 0.8)',
+                borderColor: 'rgba(67, 56, 202, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Number of Errors'
+                    },
+                    ticks: {
+                       stepSize: 1
+                    }
+                },
+                x: {
+                   title: {
+                        display: true,
+                        text: 'Topics'
+                    }
+                }
+            },
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Your Performance by Topic',
+                    font: {
+                        size: 18
+                    }
+                },
+                legend: {
+                    display: false
+                }
+            }
+        }
+    });
+}
+
+// Display explanations for wrong answers
+function displayWrongExplanations() {
+    wrongExplanationsList.innerHTML = '';
+    const wrongAnswersDetails = [];
+
+    userAnswers.forEach((answer, index) => {
+        if (answer && !answer.isCorrect) {
+            wrongAnswersDetails.push(shuffledQuestions[index]);
+        }
+    });
+
+    if (wrongAnswersDetails.length === 0) {
+        wrongExplanationsList.innerHTML = '<p class="text-green-600 font-semibold">Congratulations! You answered all questions correctly.</p>';
+        return;
+    }
+
+    wrongAnswersDetails.forEach((q, i) => {
+        const div = document.createElement('div');
+        div.className = "p-4 bg-slate-50 rounded-lg border border-slate-200";
+        div.innerHTML = `
+            <p class="text-slate-600"><span class="font-bold">Note ${i + 1}:</span> ${q.explanation}</p>
+        `;
+        wrongExplanationsList.appendChild(div);
+    });
+}
+
+// Restart quiz
+function restartQuiz() {
+    if(chartInstance) {
+        chartInstance.destroy();
+    }
+    resultsScreen.classList.add('hidden');
+    startScreen.classList.remove('hidden');
+    nameInput.value = '';
+    nameError.textContent = '';
+    nameInput.classList.remove('border-red-500');
+}
+
+// --- EVENT LISTENERS ---
+startBtn.addEventListener('click', startQuiz);
+nextBtn.addEventListener('click', nextQuestion);
+prevBtn.addEventListener('click', prevQuestion);
+restartBtn.addEventListener('click', restartQuiz);
+
+// Modal listeners
+exitBtn.addEventListener('click', () => exitModal.classList.remove('hidden'));
+cancelExitBtn.addEventListener('click', () => exitModal.classList.add('hidden'));
+confirmExitBtn.addEventListener('click', () => {
+    exitModal.classList.add('hidden');
+    endQuiz();
+});
+
+</script>
+</body>
+</html>
